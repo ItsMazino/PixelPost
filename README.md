@@ -2,6 +2,10 @@
 
 **A little piece of somewhere.**
 
+**Live demo:** [Try PixelPost](https://pixel-post-three.vercel.app)
+
+**Repository:** [ItsMazino/PixelPost](https://github.com/ItsMazino/PixelPost)
+
 A frontend-only postcard atelier built with **Next.js, TypeScript, shadcn/ui, and Framer Motion**. Turn a travel photo into a personal keepsake with editable typography, movable stickers, paper colors, a handwritten reverse side, and high-resolution PNG downloads and two-sided printable PDFs.
 
 PixelPost is a working portfolio project: the editor, local gallery, photo processing, undo/redo, and exports run in the browser. There are no accounts, API keys, server routes, or databases.
@@ -39,7 +43,7 @@ A typical workflow:
 2. Choose a bundled travel photograph or upload your own image.
 3. Add words and stickers. Drag them on the postcard, change their size and angle, and customize their colors.
 4. Flip the postcard to write a message, address it, and add a signature.
-5. Save it in your browser’s gallery download either side as a PNG, or export both sides as a printable PDF.
+5. Save it in your browser’s gallery, download either side as a PNG, or export both sides as a printable PDF.
 
 The project is intentionally focused on a delightful creative tool. It does not simulate checkout, collaboration, cloud accounts, or physical postage.
 
@@ -102,7 +106,7 @@ User action → typed postcard document → shared Canvas renderer
                        │                         │
                        ├─ undo / redo            ├─ studio preview
                        ├─ localStorage draft     ├─ gallery previews
-                       └─ saved collection       └─ PNG download
+                       └─ saved collection       └─ PNG / printable PDF
 ```
 
 Each front-side layer has a stable ID, kind, content, position, size, rotation, color, and font. Layer array order determines paint order. The reverse side uses a fixed composition with user-editable content.
@@ -160,6 +164,7 @@ PixelPost/
 │   └── ui/                     # shadcn/Radix source components
 ├── src/lib/
 │   ├── postcard.ts             # Model, templates, rendering, image processing
+│   ├── printable.ts            # Two-sided PDF generation and print dimensions
 │   └── utils.ts                # UI utilities
 ├── tests/
 │   ├── postcard.test.mjs        # Model and upload validation tests
@@ -215,7 +220,7 @@ For Vercel:
 
 For a generic static host, publish the contents of `out/`. Asset paths currently assume the site is hosted at the domain root. A subdirectory deployment requires a Next.js `basePath` and matching asset path changes.
 
-This repository does not contain a fabricated production URL. Add the live demo link here after deployment.
+The live deployment is [pixel-post-three.vercel.app](https://pixel-post-three.vercel.app). Vercel is connected to this repository and deploys updates pushed to `main`.
 
 ## Accessibility and responsive design
 
@@ -246,7 +251,7 @@ Fonts are bundled locally; images are cached after decoding. Template preview do
 | Long notes | Messages allow 220 characters and up to eight entered lines; the renderer shows up to eight wrapped lines. Recipient text uses up to four lines. Check the back before export. |
 | Missing photo | Choose another bundled image or upload the file again. |
 | Blank or fallback lettering | Fonts must finish loading before rendering. The renderer explicitly waits for them; check that static font assets are available. |
-| Exported side is unexpected | Export follows the currently selected front/back tab. Export each side separately. |
+| Exported side is unexpected | PNG export follows the selected front/back tab. PDF export always includes both sides, front first. |
 | Undo disappears after refresh | History is session-only; the latest draft and gallery persist. |
 
 There is no multiplayer editing, cloud backup, physical mail service, SVG export, arbitrary photo layering, or print fulfillment. Uploaded photos replace the template’s primary photo. The project is designed as a focused, complete frontend showcase.
